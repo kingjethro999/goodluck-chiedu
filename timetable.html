@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        .custom-table th {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #6c757d;
+            font-weight: 500;
+            background-color: #f8f9fa;
+        }
+
+        .custom-table td {
+            font-size: 0.875rem;
+            color: #212529;
+        }
+
+        .custom-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .table-container {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+
+        .export-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-pdf {
+            background-color: #dc3545;
+        }
+
+        .btn-pdf:hover {
+            background-color: #bb2d3b;
+        }
+
+        .btn-excel {
+            background-color: #198754;
+        }
+
+        .btn-excel:hover {
+            background-color: #157347;
+        }
+
+        .btn-image {
+            background-color: #0d6efd;
+        }
+
+        .btn-image:hover {
+            background-color: #0b5ed7;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar position-fixed h-100 bg-white border-end d-flex flex-column">
+            <div class="brand-header d-flex align-items-center justify-content-center">
+                <img src="./img/upscaled_lincoln.jpg" class="img-fluid p-2 h-auto brand-logo">
+            </div>
+
+            <button class="close-sidebar btn border-0 position-absolute top-0 end-0 m-3">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <nav class="p-3">
+                <a href="#" class="nav-item d-flex align-items-center rounded-3 mb-1 active">
+                    <i class="fas fa-home nav-icon"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item d-flex align-items-center rounded-3 mb-1">
+                    <i class="fas fa-clipboard-check nav-icon"></i>
+                    <span>Mark Attendance</span>
+                </a>
+                <a href="timetable.html" class="nav-item d-flex align-items-center rounded-3 mb-1">
+                    <i class="fas fa-calendar nav-icon"></i>
+                    <span>View Timetables</span>
+                </a>
+                <a href="#" class="nav-item d-flex align-items-center rounded-3 mb-1">
+                    <i class="fas fa-graduation-cap nav-icon"></i>
+                    <span>Check Results</span>
+                </a>
+                <a href="#" class="nav-item d-flex align-items-center rounded-3 mb-1">
+                    <i class="fas fa-credit-card nav-icon"></i>
+                    <span>Make Payments</span>
+                </a>
+                <a href="#" class="nav-item d-flex align-items-center rounded-3 mb-1">
+                    <i class="fas fa-chalkboard-teacher nav-icon"></i>
+                    <span>Book Tutoring</span>
+                </a>
+                <a href="#" class="nav-item d-flex align-items-center rounded-3 mb-1">
+                    <i class="fas fa-chalkboard nav-icon"></i>
+                    <span> Courses</span>
+                </a>
+                <a href="#" class="nav-item d-flex align-items-center rounded-3 mb-1">
+                    <i class="fas fa-bell nav-icon"></i>
+                    <span>Event Reminders</span>
+                </a>
+                <a href="#" class="nav-item d-flex align-items-center rounded-3">
+                    <i class="fas fa-address-book nav-icon"></i>
+                    <span>School Contact</span>
+                </a>
+            </nav>
+
+            <div class="p-3 mt-auto">
+                <a href="#" class="nav-item d-flex align-items-center rounded-3">
+                    <i class="fas fa-sign-out-alt nav-icon"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Sidebar Overlay do not touch -->
+        <div class="sidebar-overlay"></div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="position-fixed bg-white border-bottom d-flex align-items-center px-3"
+                style="height: var(--header-height); width: calc(100% - var(--sidebar-width)); z-index: 999;">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <div class="col d-flex align-items-center">
+                            <button class="btn border-0 p-0 d-flex mobile-toggle d-none me-2">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-8 text-center">
+                            <input type="text" class="form-control mx-auto rounded-pill" placeholder="Search..."
+                                style="max-width: 500px;">
+                        </div>
+                        <div class="col d-flex justify-content-end">
+                            <div class="rounded-circle ms-3"
+                                style="width: 40px; height: 40px; background-color: var(--primary-color);"></div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="container-fluid py-4 mt-5">
+                <div class="container">
+                    <!-- Header Section -->
+                    <div class="mb-4">
+                        <h1 class="h2 fw-bold text-dark">My Timetable</h1>
+                        <p class="text-secondary">Department: Computer Software Engineering | Semester: 2</p>
+                    </div>
+
+                    <!-- Export Buttons -->
+                    <div class="mb-4 d-flex gap-2">
+                        <button onclick="exportToPDF()" class="export-btn btn-pdf">
+                            <i class="fas fa-file-pdf"></i>
+                            Export PDF
+                        </button>
+                        <button onclick="exportToExcel()" class="export-btn btn-excel">
+                            <i class="fas fa-file-excel"></i>
+                            Export Excel
+                        </button>
+                        <button onclick="exportToImage()" class="export-btn btn-image">
+                            <i class="fas fa-image"></i>
+                            Export Image
+                        </button>
+                    </div>
+
+                    <!-- Timetable -->
+                    <div class="table-container">
+                        <div class="table-responsive">
+                            <table class="table custom-table table-bordered mb-0" id="timetable">
+                                <thead>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Course Code</th>
+                                        <th>Course Name</th>
+                                        <th>Time</th>
+                                        <th>Room</th>
+                                        <th>Lecturer</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Friday</td>
+                                        <td>CSE201</td>
+                                        <td>Data Structures</td>
+                                        <td>12:55 PM - 03:55 PM</td>
+                                        <td>Room 3</td>
+                                        <td>Jethro Jerry</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Friday</td>
+                                        <td>CSE206</td>
+                                        <td>Advanced Web Development</td>
+                                        <td>07:57 PM - 09:56 PM</td>
+                                        <td>Room 3</td>
+                                        <td>Jethro Jerry</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Saturday</td>
+                                        <td>CSE201</td>
+                                        <td>Data Structures</td>
+                                        <td>08:54 AM - 09:54 AM</td>
+                                        <td>Room 3</td>
+                                        <td>Jethro Jerry</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="./javascript/script.js"></script>
+    <script>
+        function exportToPDF() {
+            // PDF export functionality
+            console.log('Export to PDF');
+        }
+
+        function exportToExcel() {
+            // Excel export functionality
+            console.log('Export to Excel');
+        }
+
+        function exportToImage() {
+            // Image export functionality
+            console.log('Export to Image');
+        }
+    </script>
+</body>
+
+</html>

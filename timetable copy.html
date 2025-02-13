@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable Management - Computer Software Engineering</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles to match the original design */
+        body {
+            background-color: #f3f4f6;
+        }
+        
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .table-container {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+            overflow: hidden;
+        }
+        
+        .table th {
+            background-color: #f9fafb;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6b7280;
+            letter-spacing: 0.05em;
+        }
+        
+        .modal-content {
+            border-radius: 0.5rem;
+        }
+        
+        .btn-primary {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+        
+        .btn-danger {
+            background-color: #ef4444;
+            border-color: #ef4444;
+        }
+        
+        .btn-danger:hover {
+            background-color: #dc2626;
+            border-color: #dc2626;
+        }
+        
+        .edit-link {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        
+        .edit-link:hover {
+            color: #2563eb;
+        }
+        
+        @media (max-width: 768px) {
+            .hide-on-mobile {
+                display: none !important;
+            }
+        }
+        
+        .form-control, .form-select {
+            border-radius: 0.375rem;
+            border-color: #d1d5db;
+        }
+        
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <h1 class="navbar-brand mb-0 h1">
+                <a href="index.html" class="text-decoration-none text-dark me-2">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <span class="hide-on-mobile">Timetables Management</span>
+            </h1>
+            <div class="d-flex">
+                <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#timetableModal">
+                    <span class="hide-on-mobile">Create</span> New Timetable <span>Entry</span>
+                </button>
+                <a href="../logout.html" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Timetable Entries -->
+    <div class="container">
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Semester</th>
+                            <th>Course</th>
+                            <th>Day</th>
+                            <th>Time</th>
+                            <th>Room</th>
+                            <th>Lecturer</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timetableBody">
+                        <!-- Timetable entries will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="timetableModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Create Timetable Entry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="timetableForm">
+                        <input type="hidden" id="timetableId" name="timetable_id">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Semester</label>
+                            <select class="form-select" name="semester" id="semester" required>
+                                <option value="1">Semester 1</option>
+                                <option value="2">Semester 2</option>
+                                <option value="3">Semester 3</option>
+                                <option value="4">Semester 4</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Course</label>
+                            <select class="form-select" name="course_id" id="courseSelect" required>
+                                <!-- Courses will be populated dynamically -->
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Day of Week</label>
+                            <select class="form-select" name="day_of_week" id="dayOfWeek" required>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Start Time</label>
+                            <input type="time" class="form-control" name="start_time" id="startTime" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">End Time</label>
+                            <input type="time" class="form-control" name="end_time" id="endTime" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Lecturer</label>
+                            <select class="form-select" name="lecturer_id" id="lecturerId" required>
+                                <option value="7">Jethro Jerry</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Room</label>
+                            <input type="text" class="form-control" name="room" id="room" required placeholder="e.g., Lecture Hall A, Room 302">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveButton">Create Timetable Entry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Course data
+        const courses = [{"id":106,"code":"CSE101","name":"Programming Fundamentals","semester":1},{"id":107,"code":"CSE102","name":"Computer Architecture","semester":1},{"id":108,"code":"CSE103","name":"Mathematics for Computing","semester":1},{"id":109,"code":"CSE104","name":"Digital Logic Design","semester":1},{"id":110,"code":"CSE105","name":"Software Engineering Principles","semester":1},{"id":111,"code":"CSE106","name":"Web Development Basics","semester":1},{"id":113,"code":"CSE201","name":"Data Structures","semester":2},{"id":114,"code":"CSE202","name":"Object-Oriented Programming","semester":2},{"id":115,"code":"CSE203","name":"Operating Systems","semester":2},{"id":116,"code":"CSE204","name":"Computer Networks","semester":2},{"id":117,"code":"CSE205","name":"Software Design Patterns","semester":2},{"id":118,"code":"CSE206","name":"Advanced Web Development","semester":2},{"id":119,"code":"CSE207","name":"Mobile App Development","semester":2},{"id":120,"code":"CSE301","name":"Software Testing","semester":3},{"id":121,"code":"CSE302","name":"Artificial Intelligence","semester":3},{"id":122,"code":"CSE303","name":"Cloud Computing","semester":3},{"id":123,"code":"CSE304","name":"Cybersecurity","semester":3},{"id":124,"code":"CSE305","name":"Big Data Analytics","semester":3},{"id":125,"code":"CSE306","name":"DevOps Practices","semester":3},{"id":126,"code":"CSE307","name":"System Design","semester":3},{"id":127,"code":"CSE401","name":"Software Project Management","semester":4},{"id":128,"code":"CSE402","name":"Machine Learning","semester":4},{"id":129,"code":"CSE403","name":"Distributed Systems","semester":4},{"id":130,"code":"CSE404","name":"Blockchain Technology","semester":4},{"id":131,"code":"CSE405","name":"IoT Development","semester":4},{"id":132,"code":"CSE406","name":"Software Architecture","semester":4},{"id":133,"code":"CSE407","name":"Capstone Project","semester":4}];
+
+        // Initial timetable data
+        const initialTimetables = [
+            {
+                timetable_id: '2',
+                semester: '1',
+                course_id: '110',
+                lecturer_id: '7',
+                day_of_week: 'Monday',
+                start_time: '00:00',
+                end_time: '02:00',
+                room: 'Rooom 4'
+            },
+            // Add other timetable entries here
+        ];
+
+        // DOM Elements
+        const modal = new bootstrap.Modal(document.getElementById('timetableModal'));
+        const modalTitle = document.getElementById('modalTitle');
+        const timetableForm = document.getElementById('timetableForm');
+        const saveButton = document.getElementById('saveButton');
+        const semesterSelect = document.getElementById('semester');
+        const courseSelect = document.getElementById('courseSelect');
+
+        // Functions
+        function filterCourses(semester) {
+            const filteredCourses = courses.filter(course => 
+                course.semester.toString() === semester.toString()
+            );
+            
+            courseSelect.innerHTML = filteredCourses.map(course => 
+                `<option value="${course.id}">${course.code} - ${course.name}</option>`
+            ).join('');
+        }
+
+        function populateTimetableTable() {
+            const timetableBody = document.getElementById('timetableBody');
+            timetableBody.innerHTML = initialTimetables.map(entry => {
+                const course = courses.find(c => c.id.toString() === entry.course_id);
+                return `
+                    <tr>
+                        <td>${entry.semester}</td>
+                        <td>${course ? `${course.code} - ${course.name}` : ''}</td>
+                        <td>${entry.day_of_week}</td>
+                        <td>${entry.start_time} - ${entry.end_time}</td>
+                        <td>${entry.room}</td>
+                        <td>Jethro Jerry</td>
+                        <td class="text-end">
+                            <button onclick="editTimetable(${JSON.stringify(entry).replace(/"/g, '&quot;')})" 
+                                    class="btn btn-link edit-link">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function editTimetable(timetable) {
+            modalTitle.textContent = 'Edit Timetable Entry';
+            saveButton.textContent = 'Update Timetable Entry';
+            
+            document.getElementById('timetableId').value = timetable.timetable_id;
+            document.getElementById('semester').value = timetable.semester;
+            filterCourses(timetable.semester);
+            document.getElementById('courseSelect').value = timetable.course_id;
+            document.getElementById('dayOfWeek').value = timetable.day_of_week;
+            document.getElementById('startTime').value = timetable.start_time;
+            document.getElementById('endTime').value = timetable.end_time;
+            document.getElementById('lecturerId').value = timetable.lecturer_id;
+            document.getElementById('room').value = timetable.room;
+            
+            modal.show();
+        }
+
+        // Event Listeners
+        semesterSelect.addEventListener('change', (e) => {
+            filterCourses(e.target.value);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            filterCourses('1');
+            populateTimetableTable();
+        });
+
+        // Reset form when modal is hidden
+        document.getElementById('timetableModal').addEventListener('hidden.bs.modal', () => {
+            timetableForm.reset();
+            modalTitle.textContent = 'Create Timetable Entry';
+            saveButton.textContent = 'Create Timetable Entry';
+            document.getElementById('timetableId').value = '';
+        });
+
+        // Handle form submission
+        saveButton.addEventListener('click', () => {
+            if (timetableForm.checkValidity()) {
+                // Here you would typically send the data to your backend
+                console.log('Form data:', new FormData(timetableForm));
+                modal.hide();
+            } else {
+                timetableForm.reportValidity();
+            }
+        });
+    </script>
+</body>
+</html>
